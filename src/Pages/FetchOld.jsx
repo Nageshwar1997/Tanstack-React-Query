@@ -3,25 +3,24 @@ import { fetchPosts } from "../API/api";
 
 const FetchOld = () => {
   const [posts, setPosts] = useState([]);
-
-  const getPostsData = async () => {
-    try {
-      const res = await fetchPosts();
-
-      // console.log("res", res.data);
-
-      res.status === 200 ? setPosts(res.data) : [];
-    } catch (error) {
-      console.log(error);
-      setPosts([]);
-    }
-  };
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    getPostsData();
+    setLoading(true);
+    fetchPosts().then((data) => {
+      setPosts(data);
+      setLoading(false);
+    }).catch((error) => {
+      setError(error.message || "Something went wrong");
+    });
+    setLoading(false);
+
   }, []);
   return (
     <div>
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
       <ul className="section-accordion">
         {posts?.map((post) => (
           <li key={post.id}>

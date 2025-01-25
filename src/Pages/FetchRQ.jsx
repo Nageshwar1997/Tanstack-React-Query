@@ -2,27 +2,37 @@ import { fetchPosts } from "../API/api";
 import { useQuery } from "@tanstack/react-query";
 
 const FetchRQ = () => {
-  const getPostsData = async () => {
-    try {
-      const res = await fetchPosts();
+  const {
+    data = [],
+    isPending, // Loading state
+    isError, // Error state
+    error,
+  } = useQuery({
+    queryKey: ["posts"], // Unique key for this query
+    queryFn: fetchPosts, // Function to fetch the data
+    // gcTime: 1000, // Time before the query is considered stale
+    // staleTime: 10000, // Time before the query is considered stale
+    refetchInterval: 1000, // Interval at which the query is refetched
+    refetchIntervalInBackground: true, // Refetch the query in the background
+  });
 
-      console.log("res", res.data);
+  // console.log("data", data);
 
-      res.status === 200 ? res.data : [];
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // console.log("error", error);
+  // console.log("isError", isError);
+  // console.log("isPending", isPending);
 
-  const { data } = useQuery({
-    queryKey: ["posts"], // useState works
-    queryFn: getPostsData, // useEffect works
-  }); // requires min 3 arguments 1. query key, 2. query function, 3. options object
-  
+  if (isError) {
+    return <p>Error: {error.message ?? "Something went wrong"} </p>;
+  }
+
+  if (isPending) {
+    return <p>Loading...</p>;
+  }
   return (
     <div>
       <ul className="section-accordion">
-        {data?.map((post) => (
+        {data.map((post) => (
           <li key={post.id}>
             <p>{post.title}</p>
             <p>{post.body}</p>
