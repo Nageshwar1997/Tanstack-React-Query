@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { fetchPosts } from "../API/api";
 import { useQuery } from "@tanstack/react-query";
 
@@ -34,8 +35,11 @@ const FetchRQ = () => {
       <ul className="section-accordion">
         {data.map((post) => (
           <li key={post.id}>
-            <p>{post.title}</p>
-            <p>{post.body}</p>
+            <NavLink to={`/rq/${post.id}`}>
+              <p>{post.id}</p>
+              <p>{post.title}</p>
+              <p>{post.body}</p>
+            </NavLink>
           </li>
         ))}
       </ul>
