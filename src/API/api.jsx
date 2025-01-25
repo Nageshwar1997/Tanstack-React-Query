@@ -4,9 +4,9 @@ const api = axios.create({
   baseURL: `https://jsonplaceholder.typicode.com`,
 });
 
-export const fetchPosts = async () => {
+export const fetch_posts = async (page = 1) => {
   try {
-    const res = await api.get("/posts?_start=0&_limit=4");
+    const res = await api.get(`/posts?_page=${page}&_limit=2`);
     return res.status === 200 ? res.data : [];
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -16,6 +16,21 @@ export const fetchPostIndv = async (id) => {
   try {
     const res = await api.get(`/posts/${id}`);
     return res.status === 200 ? res.data : {};
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+  }
+};
+
+export const delete_post = async (id) => {
+  try {
+    return await api.delete(`/posts/${id}`);
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+  }
+};
+export const update_post = async (id) => {
+  try {
+    return await api.put(`/posts/${id}`, { title: "Updated title" });
   } catch (error) {
     console.error("Error fetching posts:", error);
   }

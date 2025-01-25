@@ -15,6 +15,9 @@ const Header = () => {
           <li>
             <NavLink to="/rq">FetchRQ</NavLink>
           </li>
+          <li>
+            <NavLink to="/rq2">FetchRQ2</NavLink>
+          </li>
         </ul>
       </div>
     </header>

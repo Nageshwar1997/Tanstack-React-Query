@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchPosts } from "../API/api";
+import { fetch_posts } from "../API/api";
 
 const FetchOld = () => {
   const [posts, setPosts] = useState([]);
@@ -8,7 +8,7 @@ const FetchOld = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetchPosts().then((data) => {
+    fetch_posts().then((data) => {
       setPosts(data);
       setLoading(false);
     }).catch((error) => {

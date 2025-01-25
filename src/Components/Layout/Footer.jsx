@@ -2,8 +2,10 @@
 
 const Footer = () => {
   return (
-    <div>Footer</div>
-  )
+    <footer>
+      <p>copyright @Nageshwar Pawar</p>
+    </footer>
+  );
 }
 
 export default Footer
