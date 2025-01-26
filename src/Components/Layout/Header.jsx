@@ -4,7 +4,6 @@ const Header = () => {
   return (
     <header>
       <div>
-        <NavLink to="/">Hangeshwar Pawar</NavLink>
         <ul>
           <li>
             <NavLink to="/">Home</NavLink>
@@ -17,6 +16,9 @@ const Header = () => {
           </li>
           <li>
             <NavLink to="/rq2">FetchRQ2</NavLink>
+          </li>
+          <li>
+            <NavLink to="/infinite-scroll">Infinite Scroll</NavLink>
           </li>
         </ul>
       </div>
