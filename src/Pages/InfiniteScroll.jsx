@@ -2,6 +2,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { infinite_scroll } from "../API/api";
 import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 const InfiniteScroll = () => {
   const {
@@ -10,6 +11,7 @@ const InfiniteScroll = () => {
     fetchNextPage,
     isFetchingNextPage,
     isFetchNextPageError,
+    hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["users"],
     queryFn: infinite_scroll,
@@ -21,26 +23,37 @@ const InfiniteScroll = () => {
     },
   });
 
-    // Without any library
-//   const handleScroll = () => {
-//     if (
-//       //   window.innerHeight + document.documentElement.scrollTop ===
-//       //   document.documentElement.offsetHeight // OR
-//       window.innerHeight + window.scrollY >=
-//       document.documentElement.scrollHeight - 1
-//     ) {
-//       fetchNextPage();
-//     }
-//   };
+  // Without any library
+  //   const handleScroll = () => {
+  //     const bottom =
+  //       window.innerHeight + document.documentElement.scrollTop ===
+  //       document.documentElement.offsetHeight;
+  //     // OR
+  //     const bottom =
+  //       window.innerHeight + window.scrollY >=
+  //       document.documentElement.scrollHeight - 1;
+  //     if (bottom && hasNextPage) {
+  //       fetchNextPage();
+  //     }
+  //   };
 
-//   useEffect(() => {
-//     window.addEventListener("scroll", handleScroll);
+  //   useEffect(() => {
+  //     window.addEventListener("scroll", handleScroll);
 
-//     return () => window.removeEventListener("scroll", handleScroll);
-    //   }, []);
-    
+  //     return () => window.removeEventListener("scroll", handleScroll);
+  //   }, []);
 
-    // With React-Intersection-Observer Library
+  // With React-Intersection-Observer Library
+
+  const { ref, inView } = useInView({
+    threshold: 1,
+  });
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage]);
 
   if (status === "loading") {
     return <p>Loading...</p>;
@@ -74,10 +87,20 @@ const InfiniteScroll = () => {
           })}
         </ul>
       ))}
-      {isFetchingNextPage && <p>Loading more...</p>}
-      {isFetchNextPageError && (
-        <p>Error: {"Something went wrong while fetching more data"} </p>
-      )}
+      <div ref={ref} style={{ padding: "20px", textAlign: "center" }}>
+        {" "}
+        {/* If using react-intersection-observer library  */}
+        {isFetchingNextPage ? (
+          <p>Loading more...</p>
+        ) : hasNextPage ? (
+          <p>Scroll down to load more</p>
+        ) : (
+          <p>No more users</p>
+        )}
+        {isFetchNextPageError && (
+          <p>Error: {"Something went wrong while fetching more data"} </p>
+        )}
+      </div>
     </div>
   );
 };
